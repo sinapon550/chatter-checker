@@ -111,7 +111,7 @@
   <div class="tool">
     <div class="pad" id="pad">
       <div class="big">ここをクリックして診断</div>
-      <div class="small">1回ずつ、ゆっくりめに20〜30回くらい押してみて</div>
+      <div class="small">1回ずつ、ゆっくりめに20〜30回くらい。左・右・ホイールクリックどれでもOK（それぞれ別々に判定します）</div>
     </div>
 
     <div class="controls">
@@ -221,29 +221,33 @@
   var pad=document.getElementById('pad'),elTotal=document.getElementById('total'),
       elChat=document.getElementById('chat'),elMin=document.getElementById('min'),
       elVerdict=document.getElementById('verdict'),elLog=document.getElementById('log');
-  var last=null,total=0,chatter=0,minGap=Infinity,THRESH=60,DBL=120,shown=false;
+  var last={},total=0,chatter=0,minGap=Infinity,THRESH=60,DBL=120,shown=false;
 
   document.getElementById('reset').addEventListener('click',function(){
-    last=null;total=0;chatter=0;minGap=Infinity;shown=false;
+    last={};total=0;chatter=0;minGap=Infinity;shown=false;
     elTotal.textContent='0';elChat.textContent='0';elChat.className='v ok';
     elMin.textContent='— ms';elVerdict.textContent='枠を押すと診断がはじまります。';
     elLog.innerHTML='';document.getElementById('reco').style.display='none';
   });
 
   pad.addEventListener('contextmenu',function(e){e.preventDefault();});
+  pad.addEventListener('auxclick',function(e){e.preventDefault();});
   pad.addEventListener('mousedown',function(e){
-    if(e.button!==0)return;
+    var b=e.button; // 0=左 1=ホイール(中) 2=右
+    if(b>2)return;
+    if(b===1)e.preventDefault(); // 中クリックのオートスクロール抑制
+    var name=(b===0?'左':(b===2?'右':'ホイール'));
     var now=performance.now();total++;
     var gap=null,tg='norm',lb='正常';
-    if(last!==null){gap=now-last;if(gap<minGap)minGap=gap;
+    if(last[b]!=null){gap=now-last[b];if(gap<minGap)minGap=gap;
       if(gap<=THRESH){tg='chat';lb='⚠ 疑い';chatter++;}
       else if(gap<=DBL){tg='dbl';lb='速い連打';}}
-    last=now;
+    last[b]=now;
     elTotal.textContent=total;elChat.textContent=chatter;
     elChat.className='v '+(chatter===0?'ok':(chatter<=2?'warn':'bad'));
     elMin.textContent=(minGap===Infinity?'—':Math.round(minGap))+' ms';
     var l=document.createElement('div');l.className='l';
-    l.innerHTML='<span>'+total+'回目'+(gap===null?'（最初）':' 　'+Math.round(gap)+'ms')+'</span>'+
+    l.innerHTML='<span>'+name+'クリック '+total+'回目'+(gap===null?'（最初）':' 　'+Math.round(gap)+'ms')+'</span>'+
       '<span class="tag '+tg+'">'+lb+'</span>';
     elLog.insertBefore(l,elLog.firstChild);
     verdict();
