@@ -71,6 +71,9 @@
   .mine{margin:16px 0 0}
   .mine img{width:100%;border-radius:16px;border:1px solid var(--line);display:block;box-shadow:var(--shadow)}
   .mine figcaption{font-size:12.5px;color:var(--sub);margin-top:8px}
+  .picks{list-style:none;padding:0;margin:12px 0 0}
+  .picks li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-bottom:10px;font-size:14px}
+  .picks li b{color:var(--pink-d)}
   footer{margin:44px 0 30px;padding:18px;background:var(--card);border:1px solid var(--line);border-radius:18px;font-size:13px;color:var(--sub)}
   footer a{color:var(--green-d);text-decoration:none;font-weight:700}
   .foot-top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
@@ -151,6 +154,13 @@
     <figcaption>ちなみにこれが私の。左が愛用のG502、右がG703。どっちも何年もガシガシ使ってて、見ての通り年季入ってます（笑）。毎日酷使するからこそ、丈夫さと保証で選んでます。</figcaption>
   </figure>
 
+  <h2>マウスを選ぶときに私が見てるところ</h2>
+  <ul class="picks">
+    <li><b>進む・戻るボタンは必須。</b>一度使うと無いと戻れないやつ。ブラウザの行ったり来たりやファイル操作が一気にラクになります。</li>
+    <li><b>充電式（USB-C）だと気がラク。</b>電池の買い置きがいらないし、切れてもケーブル挿せばすぐ復活。</li>
+    <li><b>軽いと手が疲れにくい。</b>長く使う日ほど効いてきます。ゲームもするなら、私はG703hみたいな軽量タイプが好き。</li>
+  </ul>
+
   <h2>買い替える前に試せること</h2>
   <details><summary>掃除してみる</summary><p>スイッチの中にホコリが入ってるだけのこともあります。軽症なら接点復活剤やエアダスターで直る場合も。分解が必要なので自己責任で。</p></details>
   <details><summary>ダブルクリック対策のソフトを使う</summary><p>一瞬の連続クリックを無視してくれるソフトもあります。ただ根本解決じゃなく延命なので、仕事で使うなら買い替えが安心。</p></details>
@@ -174,9 +184,9 @@
   var BOX="amazon-box.png";
 
   var RECO_BAD=[
-    {h:"仕事・在宅の定番（普通のシリーズ）",p:"ロジクール MX Master 3S。静音クリックで打ち心地がよくて、複数のパソコン切り替えもできる万能機。落ち着いて長く使いたい人に。",k:"ロジクール MX Master 3S"},
-    {h:"もう再発させたくない（Gの光学スイッチ）",p:"G PRO X SUPERLIGHT 2。新型の光学スイッチで物理接点が減って、チャタリングが起きにくい。軽くて反応も速い。",k:"ロジクール G PRO X SUPERLIGHT 2"},
-    {h:"安く今すぐ替えたい",p:"ロジクール G304 や M650 あたり。安くても無線で安定、保証も2年。とにかく確実に直したい人に。",k:"ロジクール G304"}
+    {h:"仕事でずっと使うなら（高機能・ちょっと高い）",p:"ロジクール MX MASTER 4。静音＆触覚フィードバックで、一日中さわっても疲れにくい高級機。正直これ、私が今いちばん欲しい。",u:"https://www.amazon.co.jp/dp/B0FR8LPP2K?tag=akishinamon92-22"},
+    {h:"持ち運び用に（折りたためる）",p:"ロジクール Mobi Fold。パタッと折りたためる携帯マウスで、静音・充電式。外でも使いたい人に。ちょっと高いけど気になってる一台。",u:"https://www.amazon.co.jp/dp/B0GJ7TGTHT?tag=akishinamon92-22"},
+    {h:"予算を抑えるなら",p:"ロジクール Signature M750。静音でほどよいサイズの定番。安く確実に替えたい人はこれで十分。",u:"https://www.amazon.co.jp/dp/B0BKPL1VKW?tag=akishinamon92-22"}
   ];
   var RECO_OK=[
     {h:"接点復活剤でお手入れ",p:"まだ寿命じゃなさそう。気になるなら掃除で延命してみても。",k:"接点復活剤 スプレー"},
@@ -190,8 +200,9 @@
     var g=document.getElementById('recoGrid');g.innerHTML='';
     list.forEach(function(it){
       var d=document.createElement('div');d.className='rc';
+      var href=it.u?it.u:az(it.k);
       d.innerHTML='<h3>'+it.h+'</h3><p>'+it.p+'</p>'+
-        '<a class="btn" target="_blank" rel="noopener sponsored" href="'+az(it.k)+'"><img src="'+BOX+'" alt="">Amazonで見る</a>';
+        '<a class="btn" target="_blank" rel="noopener sponsored" href="'+href+'"><img src="'+BOX+'" alt="">Amazonで見る</a>';
       g.appendChild(d);
     });
     document.getElementById('reco').style.display='block';
