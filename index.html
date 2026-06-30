@@ -20,7 +20,7 @@
   .wrap{max-width:760px;margin:0 auto;padding:0 18px}
   /* ヘッダー */
   header{display:flex;align-items:center;gap:10px;padding:14px 0}
-  header img{width:46px;height:46px;object-fit:cover;border-radius:50%}
+  header img{width:46px;height:46px;object-fit:contain}
   .brand{font-weight:800;font-size:16px}
   .brand small{display:block;font-weight:500;font-size:11px;color:var(--sub)}
   /* PR表記 */
@@ -29,7 +29,7 @@
   /* ヒーロー */
   .hero{display:flex;gap:14px;align-items:flex-end;background:linear-gradient(135deg,#fff0f5,#f1faf2);border:1px solid var(--line);border-radius:22px;padding:20px 20px 0;margin-bottom:6px;overflow:hidden}
   .hero .txt{padding-bottom:20px}
-  .hero img{width:130px;height:130px;object-fit:cover;border-radius:50%;align-self:center;flex:none;margin-bottom:16px}
+  .hero img{width:140px;height:auto;object-fit:contain;align-self:center;flex:none}
   h1{font-size:23px;margin:0 0 8px;line-height:1.45}
   .hero p{margin:0;font-size:14px;color:var(--sub)}
   h2{font-size:19px;margin:36px 0 10px;display:flex;align-items:center;gap:8px}
@@ -111,10 +111,6 @@
 
     <div class="controls">
       <button class="ghost" id="reset">やり直す</button>
-      <span class="thr">きびしさ
-        <input id="thr" type="range" min="20" max="120" step="5" value="60">
-        <b id="thrV">60</b>ms以下を疑い
-      </span>
     </div>
 
     <div class="row">
@@ -219,11 +215,9 @@
 
   var pad=document.getElementById('pad'),elTotal=document.getElementById('total'),
       elChat=document.getElementById('chat'),elMin=document.getElementById('min'),
-      elVerdict=document.getElementById('verdict'),elLog=document.getElementById('log'),
-      thr=document.getElementById('thr'),thrV=document.getElementById('thrV');
+      elVerdict=document.getElementById('verdict'),elLog=document.getElementById('log');
   var last=null,total=0,chatter=0,minGap=Infinity,THRESH=60,DBL=120,shown=false;
 
-  thr.addEventListener('input',function(){THRESH=parseInt(thr.value,10);thrV.textContent=THRESH;});
   document.getElementById('reset').addEventListener('click',function(){
     last=null;total=0;chatter=0;minGap=Infinity;shown=false;
     elTotal.textContent='0';elChat.textContent='0';elChat.className='v ok';
