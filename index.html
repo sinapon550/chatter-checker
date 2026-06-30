@@ -41,7 +41,12 @@
   h2::before{content:"";width:8px;height:20px;background:var(--pink);border-radius:4px}
   /* ツール */
   .tool{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;margin:18px 0;box-shadow:var(--shadow)}
-  .pad{background:linear-gradient(135deg,#fff5fa,#f3fbf5);border:2px dashed #e9c6d6;border-radius:16px;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:.06s;text-align:center;-webkit-user-select:none;user-select:none}
+  .pad{background:linear-gradient(135deg,#fff5fa,#f3fbf5);border:2px dashed #e9c6d6;border-radius:16px;min-height:210px;padding:20px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:.06s;text-align:center;-webkit-user-select:none;user-select:none}
+  .mouse{width:92px;height:auto;display:block;margin-bottom:12px}
+  .mbody{fill:#eef2f8;stroke:#cdd7e6;stroke-width:3}
+  .mbtn{fill:#e2e9f3;stroke:#cdd7e6;stroke-width:2;transition:fill .05s}
+  .mwheel{fill:#c4cfe0;stroke:#b6c2d6;stroke-width:1.5;transition:fill .05s}
+  .mline{stroke:#cdd7e6;stroke-width:2}
   .pad:active{transform:scale(.99);border-color:var(--pink);background:#ffeef5}
   .pad .big{font-size:21px;font-weight:800;color:var(--pink-d)}
   .pad .small{font-size:13px;color:var(--sub);margin-top:6px}
@@ -110,8 +115,15 @@
 
   <div class="tool">
     <div class="pad" id="pad">
-      <div class="big">ここをクリックして診断</div>
-      <div class="small">1回ずつ、ゆっくりめに20〜30回くらい。左・右・ホイールクリックどれでもOK（それぞれ別々に判定します）</div>
+      <svg class="mouse" viewBox="0 0 120 182" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path class="mbody" d="M60,6 C34,6 22,26 22,54 L22,128 C22,158 38,176 60,176 C82,176 98,158 98,128 L98,54 C98,26 86,6 60,6 Z"/>
+        <path id="mLeft" class="mbtn" d="M58,8 C40,10 25,26 24,54 L24,72 L58,72 Z"/>
+        <path id="mRight" class="mbtn" d="M62,8 C80,10 95,26 96,54 L96,72 L62,72 Z"/>
+        <rect id="mWheel" class="mwheel" x="55" y="24" width="10" height="30" rx="5"/>
+        <line class="mline" x1="24" y1="72" x2="96" y2="72"/>
+      </svg>
+      <div class="big">マウスのボタンを押して診断</div>
+      <div class="small">左・右・ホイールどれでもOK。押したボタンが光ります（赤く光ったらチャタリング疑い）</div>
     </div>
 
     <div class="controls">
@@ -230,6 +242,9 @@
     elLog.innerHTML='';document.getElementById('reco').style.display='none';
   });
 
+  var mEl={0:document.getElementById('mLeft'),1:document.getElementById('mWheel'),2:document.getElementById('mRight')};
+  function flash(b,color){var el=mEl[b];if(!el)return;el.style.fill=color;setTimeout(function(){el.style.fill='';},180);}
+
   pad.addEventListener('contextmenu',function(e){e.preventDefault();});
   pad.addEventListener('auxclick',function(e){e.preventDefault();});
   pad.addEventListener('mousedown',function(e){
@@ -243,6 +258,7 @@
       if(gap<=THRESH){tg='chat';lb='⚠ 疑い';chatter++;}
       else if(gap<=DBL){tg='dbl';lb='速い連打';}}
     last[b]=now;
+    flash(b, tg==='chat'?'#ff5d6c':(tg==='dbl'?'#ffb454':'#3ddc97'));
     elTotal.textContent=total;elChat.textContent=chatter;
     elChat.className='v '+(chatter===0?'ok':(chatter<=2?'warn':'bad'));
     elMin.textContent=(minGap===Infinity?'—':Math.round(minGap))+' ms';
