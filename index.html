@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マウスのチャタリング無料チェッカー｜1クリックが2回になる症状を今すぐ診断</title>
+<meta name="description" content="マウスのチャタリング（1回押しただけで2回クリックされる症状）を、ブラウザだけで無料診断。クリック間隔をミリ秒で測って買い替えどきかを判定します。インストール不要。">
+<!-- OGP -->
+<meta property="og:title" content="マウスのチャタリング無料チェッカー">
+<meta property="og:description" content="1クリックが2回になる…その症状、ブラウザだけで今すぐ診断できます。インストール不要・無料。">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#0f1320; --panel:#1b2030; --ink:#eef1f7; --sub:#9aa3b5;
+    --accent:#5ec3ff; --ok:#3ddc97; --warn:#ffb454; --bad:#ff5d6c;
+    --line:#2a3145; --brand:#ff9ec4;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI","Yu Gothic UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+  .wrap{max-width:780px;margin:0 auto;padding:0 18px}
+  header{padding:14px 0;border-bottom:1px solid var(--line)}
+  .logo{font-weight:800;font-size:15px}
+  .logo span{color:var(--brand)}
+  /* PR表記（必須） */
+  .pr{background:#161b29;border:1px solid var(--line);border-radius:8px;font-size:12px;color:var(--sub);padding:8px 12px;margin:14px 0}
+  h1{font-size:24px;margin:22px 0 6px;line-height:1.4}
+  .lead{color:var(--sub);font-size:14px;margin:0 0 8px}
+  h2{font-size:19px;margin:34px 0 10px;border-left:4px solid var(--accent);padding-left:10px}
+  .tool{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:18px 0}
+  .pad{background:#11162a;border:2px dashed var(--line);border-radius:14px;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:.06s;text-align:center;-webkit-user-select:none;user-select:none}
+  .pad:active{background:#1d2746;border-color:var(--accent)}
+  .pad .big{font-size:21px;font-weight:700}
+  .pad .small{font-size:13px;color:var(--sub);margin-top:6px}
+  .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}
+  button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer}
+  .thr{display:flex;align-items:center;gap:8px;color:var(--sub);font-size:13px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+  .card{background:#11162a;border:1px solid var(--line);border-radius:12px;padding:12px 14px;flex:1;min-width:120px}
+  .card .k{font-size:12px;color:var(--sub)}
+  .card .v{font-size:25px;font-weight:700;margin-top:4px}
+  .v.bad{color:var(--bad)}.v.ok{color:var(--ok)}.v.warn{color:var(--warn)}
+  .verdict{border-radius:12px;padding:14px;font-size:14px;border:1px solid var(--line);background:#11162a;margin-top:4px}
+  .verdict b{font-size:16px}
+  .reco{margin-top:8px}
+  .reco-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+  .rc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column}
+  .rc h3{margin:0 0 6px;font-size:15px}
+  .rc p{margin:0 0 12px;font-size:13px;color:var(--sub);flex:1}
+  .btn{display:inline-block;text-align:center;background:linear-gradient(180deg,#ffd27a,#ff9f43);color:#5a3000;text-decoration:none;font-weight:800;border-radius:10px;padding:11px 14px;font-size:14px}
+  .btn.sub{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:700}
+  .note{font-size:12px;color:var(--sub)}
+  details{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0}
+  summary{cursor:pointer;font-weight:700}
+  footer{margin:40px 0 30px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+  footer a{color:var(--accent);text-decoration:none}
+  .tag{font-weight:700}.tag.chat{color:var(--bad)}.tag.dbl{color:var(--warn)}.tag.norm{color:var(--sub)}
+  .log{background:#0b0e18;border:1px solid var(--line);border-radius:10px;max-height:170px;overflow:auto;font-size:12.5px;margin-top:12px}
+  .log .l{padding:5px 12px;border-bottom:1px solid #161b29;display:flex;justify-content:space-between}
+  .badge{display:inline-block;background:#2a3145;color:var(--brand);font-size:11px;font-weight:700;border-radius:6px;padding:2px 8px;vertical-align:middle;margin-left:6px}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="logo">しな<span>こも</span>ツールズ <span class="badge">BETA</span></div></div></header>
+
+<div class="wrap">
+
+  <div class="pr">📣 当サイトはアフィリエイト広告（Amazonアソシエイト）を利用しています。リンクから購入されると当サイトに紹介料が入りますが、価格は変わりません。</div>
+
+  <h1>マウスのチャタリング無料チェッカー</h1>
+  <p class="lead">「1回しか押してないのにダブルクリックになる」その症状、ブラウザだけで今すぐ診断。インストール不要・登録不要・無料です。</p>
+
+  <!-- ===== ツール ===== -->
+  <div class="tool">
+    <div class="pad" id="pad">
+      <div class="big">ここをクリックして診断</div>
+      <div class="small">普通の速さで、1回ずつゆっくり20〜30回クリック</div>
+    </div>
+
+    <div class="controls">
+      <button class="ghost" id="reset">リセット</button>
+      <span class="thr">判定しきい値
+        <input id="thr" type="range" min="20" max="120" step="5" value="60">
+        <b id="thrV">60</b> ms以下を疑い
+      </span>
+    </div>
+
+    <div class="row">
+      <div class="card"><div class="k">総クリック数</div><div id="total" class="v">0</div></div>
+      <div class="card"><div class="k">チャタリング疑い</div><div id="chat" class="v ok">0</div></div>
+      <div class="card"><div class="k">最短間隔</div><div id="min" class="v">— ms</div></div>
+    </div>
+
+    <div class="verdict" id="verdict">枠をクリックすると診断が始まります。</div>
+    <div class="log" id="log"></div>
+  </div>
+
+  <!-- ===== 結果連動おすすめ ===== -->
+  <div class="reco" id="reco" style="display:none">
+    <h2 id="recoTitle">買い替えるなら、長持ちするこのへん</h2>
+    <p class="note" id="recoLead">チャタリングはスイッチの寿命が原因。次は「高耐久スイッチ」や「光学式スイッチ」のモデルを選ぶと再発しにくいです。</p>
+    <div class="reco-grid" id="recoGrid"><!-- JSで差し込み --></div>
+    <p class="note" style="margin-top:10px">※ ベータ版のため、リンクは現在カテゴリ検索（高耐久・静音などの絞り込み）です。今後しなもこが実際に試した実名モデルに差し替えます。</p>
+  </div>
+
+  <!-- ===== ロジクール G vs 非G ===== -->
+  <h2>ロジクールの「G」と「普通のシリーズ」って何が違う？</h2>
+  <p>買い替えるなら、私（しなもこ）は正直ロジクールを推してます。自分でも使ってて、信頼性とメーカー保証2年で選んでるから。ロジクールは大きく2系統あるので、用途で選ぶといいです。</p>
+  <div class="reco-grid">
+    <div class="rc">
+      <h3>Gシリーズ（ゲーミング）</h3>
+      <p>G PRO・G502・G304 など。高精度センサーで反応が速く、軽い。新しめのモデルは<b>光学式（ハイブリッド）スイッチ</b>でチャタリングに強いのが利点。無線はLIGHTSPEEDで遅延少なめ。見た目はゲーミング寄り。<br><span class="note">→ ゲームもする・とにかく再発させたくない人向け。</span></p>
+    </div>
+    <div class="rc">
+      <h3>非Gシリーズ（仕事・日常）</h3>
+      <p>MX Master・Signature M・ERGO など。<b>静音クリック</b>・手にやさしい形・複数デバイス切替・電池持ち重視。オフィスや在宅で落ち着いて使える定番。<br><span class="note">→ 仕事メイン・カチカチ音が気になる人向け。</span></p>
+    </div>
+  </div>
+  <p class="note" style="margin-top:10px">📌 正直な話：ロジクールも昔は一部モデルでダブルクリック（チャタリング）の口コミが多かったのは事実です。ただ近年の光学スイッチ採用機で改善され、<b>保証2年</b>と手厚いので早期チャタリングでも交換してもらいやすい。そこも込みで信頼してます。</p>
+
+  <!-- ===== SEO本文 ===== -->
+  <h2>そもそもチャタリングって何？</h2>
+  <p>チャタリングは、マウスのスイッチ（左クリックの中の小さな部品）が劣化して、<b>1回しか押していないのに電気的に2回押したと誤検知される</b>現象です。クリックが勝手にダブルクリックになる、ドラッグが途中で切れる、選択が外れる…といった形で出ます。使い込んだマウスや、安価なスイッチのモデルで起きやすいです。</p>
+
+  <h2>このチェッカーの仕組み</h2>
+  <p>連続するクリックの<b>間隔をミリ秒（ms）単位で計測</b>し、しきい値（初期値60ms）より速い連続クリックを「人間の指では物理的に押せない速さ＝チャタリング疑い」としてカウントします。1回ずつ意識してゆっくり押しているのに疑いが何度も出るなら、スイッチ劣化のサインです。</p>
+
+  <h2>買い替える前に試せること</h2>
+  <details><summary>① 接点復活剤・エアダスターで掃除する</summary><p>スイッチ内部のホコリや酸化が原因のことも。軽症なら清掃で直る場合があります。分解が必要なので自己責任で。</p></details>
+  <details><summary>② スイッチのダブルクリック対策ソフトを使う</summary><p>一瞬の連続クリックを無視するソフトもありますが、根本解決ではなく延命策です。仕事で使うなら買い替えが無難。</p></details>
+  <details><summary>③ 保証期間を確認する</summary><p>ゲーミングマウスは保証が長め（1〜2年）のことも。レシートやメーカー保証を確認しましょう。</p></details>
+
+  <h2>よくある質問</h2>
+  <details><summary>速くダブルクリックすると「疑い」が増えるんだけど？</summary><p>それは正常です。わざと速く2連打すれば当然引っかかります。<b>必ず1回ずつ、意識してゆっくり</b>押して測ってください。</p></details>
+  <details><summary>何回くらいで判断すればいい？</summary><p>20〜30回が目安。1回ずつ押しているのに疑いが何度も出る、特に出る割合が高いなら買い替えどきです。</p></details>
+
+  <footer>
+    <p>このツールは「しなもこ」が作った無料ツールです。使い方・プライバシー・お問い合わせは
+    <a href="https://cinnamoko.com" target="_blank" rel="noopener">cinnamoko.com</a> から。</p>
+    <p class="note">© しなもこ / 当サイトはAmazonのアソシエイトとして適格販売により収入を得ています。</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  // ====== あなたのAmazonアソシエイトタグ ======
+  var TAG = "akishinamon92-22";
+  // カテゴリ検索リンク（ベータ：実名ASINに差し替え予定）
+  function az(keyword){ return "https://www.amazon.co.jp/s?k="+encodeURIComponent(keyword)+"&tag="+TAG; }
+
+  // おすすめはロジクール（しなもこ自身が愛用・信頼性と2年保証で選定）
+  var RECO_BAD = [
+    {h:"仕事・在宅の定番（非Gシリーズ）",p:"ロジクール MX Master 3S。静音クリックで打ち心地がよく、複数PCの切替もできる万能機。落ち着いて長く使いたい人へ。",k:"ロジクール MX Master 3S"},
+    {h:"再発させたくない（Gシリーズ・光学スイッチ）",p:"G PRO X SUPERLIGHT 2。新型の光学ハイブリッドスイッチで物理接点が減り、チャタリングが起きにくい。軽量・高精度。",k:"ロジクール G PRO X SUPERLIGHT 2"},
+    {h:"コスパ重視で今すぐ替える",p:"ロジクール G304 / M650 あたり。安くても無線で安定、メーカー保証2年。とにかく確実に直したい人へ。",k:"ロジクール G304"}
+  ];
+  var RECO_OK = [
+    {h:"接点復活剤でお手入れ",p:"まだ寿命じゃなさそう。気になるなら掃除で延命を。",k:"接点復活剤 スプレー"},
+    {h:"エアダスター",p:"ホコリ詰まりの予防に。1本持っておくと便利。",k:"エアダスター ノンフロン"},
+    {h:"予備に1つ持っておく",p:"壊れてから慌てないよう、安いのをストックしておくのも手。",k:"マウス ワイヤレス 静音"}
+  ];
+
+  function renderReco(list,title,lead){
+    document.getElementById('recoTitle').textContent=title;
+    document.getElementById('recoLead').textContent=lead;
+    var g=document.getElementById('recoGrid'); g.innerHTML='';
+    list.forEach(function(it){
+      var d=document.createElement('div'); d.className='rc';
+      d.innerHTML='<h3>'+it.h+'</h3><p>'+it.p+'</p>'+
+        '<a class="btn" target="_blank" rel="noopener sponsored" href="'+az(it.k)+'">Amazonで探す ▸</a>';
+      g.appendChild(d);
+    });
+    document.getElementById('reco').style.display='block';
+  }
+
+  // ====== 計測エンジン ======
+  var pad=document.getElementById('pad'),elTotal=document.getElementById('total'),
+      elChat=document.getElementById('chat'),elMin=document.getElementById('min'),
+      elVerdict=document.getElementById('verdict'),elLog=document.getElementById('log'),
+      thr=document.getElementById('thr'),thrV=document.getElementById('thrV');
+  var last=null,total=0,chatter=0,minGap=Infinity,THRESH=60,DBL=120,recoShown=false;
+
+  thr.addEventListener('input',function(){THRESH=parseInt(thr.value,10);thrV.textContent=THRESH;});
+  document.getElementById('reset').addEventListener('click',function(){
+    last=null;total=0;chatter=0;minGap=Infinity;recoShown=false;
+    elTotal.textContent='0';elChat.textContent='0';elChat.className='v ok';
+    elMin.textContent='— ms';elVerdict.textContent='枠をクリックすると診断が始まります。';
+    elLog.innerHTML='';document.getElementById('reco').style.display='none';
+  });
+
+  pad.addEventListener('contextmenu',function(e){e.preventDefault();});
+  pad.addEventListener('mousedown',function(e){
+    if(e.button!==0)return;
+    var now=performance.now();total++;
+    var gap=null,tag='norm',label='正常';
+    if(last!==null){gap=now-last;if(gap<minGap)minGap=gap;
+      if(gap<=THRESH){tag='chat';label='⚠ 疑い';chatter++;}
+      else if(gap<=DBL){tag='dbl';label='速い連打';}}
+    last=now;
+    elTotal.textContent=total;elChat.textContent=chatter;
+    elChat.className='v '+(chatter===0?'ok':(chatter<=2?'warn':'bad'));
+    elMin.textContent=(minGap===Infinity?'—':Math.round(minGap))+' ms';
+    var l=document.createElement('div');l.className='l';
+    l.innerHTML='<span>#'+total+(gap===null?' （最初）':' 　'+Math.round(gap)+'ms')+'</span>'+
+      '<span class="tag '+tag+'">'+label+'</span>';
+    elLog.insertBefore(l,elLog.firstChild);
+    verdict();
+  });
+
+  function verdict(){
+    if(total<5){elVerdict.innerHTML='診断中…　あと数回クリックで結果が出ます。';return;}
+    var rate=chatter/Math.max(1,total-1),html='';
+    if(chatter===0){
+      html='<b style="color:var(--ok)">✅ 良好</b><br>'+total+'回中チャタリングは検出されませんでした。今のところ問題なさそうです。';
+      if(!recoShown){recoShown=true;renderReco(RECO_OK,'まだ大丈夫。気になるならお手入れを','寿命のサインは出ていません。掃除で延命したり、予備を用意しておくと安心です。');}
+    }else if(chatter<=2&&rate<0.1){
+      html='<b style="color:var(--warn)">△ ちょっと怪しい</b><br>'+total+'回中 '+chatter+'回、異常に速い連続クリックを検出。もう一度ゆっくり30回試して、それでも出るなら劣化を疑って。';
+    }else{
+      html='<b style="color:var(--bad)">❌ チャタリングの可能性 高</b><br>'+total+'回中 '+chatter+'回（'+Math.round(rate*100)+'%）も人間に不可能な速さの連続クリックが発生。1回ずつ押してこれなら、買い替えどきです。';
+      if(!recoShown){recoShown=true;renderReco(RECO_BAD,'買い替えるなら、長持ちするこのへん','チャタリングはスイッチの寿命が原因。次は高耐久スイッチや光学式スイッチを選ぶと再発しにくいです。');}
+    }
+    elVerdict.innerHTML=html;
+  }
+})();
+</script>
+</body>
+</html>
