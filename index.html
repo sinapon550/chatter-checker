@@ -3,11 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>マウスのチャタリング無料チェッカー｜1クリックが2回になる症状を診断</title>
-<meta name="description" content="1回しか押してないのにダブルクリックになる…マウスのチャタリングを、ブラウザだけで無料診断。クリック間隔をミリ秒で測って買い替えどきかを判定します。インストール不要。">
+<title>マウスのクリックがおかしい時に調べる無料ツール｜チャタリング診断</title>
+<meta name="description" content="マウスのクリックがおかしい（1回しか押してないのにダブルクリックされる）時に、原因のチャタリングをブラウザだけで無料チェック。クリック間隔をミリ秒で測って買い替えどきかを判定します。インストール不要。">
 <meta property="og:title" content="マウスのチャタリング無料チェッカー">
 <meta property="og:description" content="1クリックが2回になるその症状、ブラウザだけで今すぐ調べられます。無料・インストール不要。">
 <meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#fff8f1; --card:#ffffff; --ink:#40383a; --sub:#8c8085;
@@ -30,7 +33,9 @@
   .hero{display:flex;gap:14px;align-items:flex-end;background:linear-gradient(135deg,#fff0f5,#f1faf2);border:1px solid var(--line);border-radius:22px;padding:20px 20px 0;margin-bottom:6px;overflow:hidden}
   .hero .txt{padding-bottom:20px}
   .hero img{width:140px;height:auto;object-fit:contain;align-self:center;flex:none}
-  h1{font-size:23px;margin:0 0 8px;line-height:1.45}
+  h1{font-size:27px;margin:0 0 8px;line-height:1.35;font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN",sans-serif;letter-spacing:.01em;white-space:nowrap}
+  .brand,h2{font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN",sans-serif}
+  @media(max-width:520px){h1{font-size:22px;white-space:normal}}
   .hero p{margin:0;font-size:14px;color:var(--sub)}
   h2{font-size:19px;margin:36px 0 10px;display:flex;align-items:center;gap:8px}
   h2::before{content:"";width:8px;height:20px;background:var(--pink);border-radius:4px}
@@ -94,8 +99,8 @@
 
   <div class="hero">
     <div class="txt">
-      <h1>マウスのチャタリング<br>無料チェッカー</h1>
-      <p>「1回しか押してないのにダブルクリックされる」あれ、マウスの寿命のサインかも。気になったのでブラウザだけで調べられるやつ作りました。登録もインストールもいりません。</p>
+      <h1>マウスのクリックがおかしい？</h1>
+      <p>「1回しか押してないのに2回入る…？」そのクリック不良（チャタリング）、ブラウザだけで今すぐ無料チェックできます。気になって自分で作りました。登録もインストールもいりません。</p>
     </div>
     <img src="hero.png" alt="パソコン作業中のしなもこ">
   </div>
